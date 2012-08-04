@@ -1,0 +1,8 @@
+Populate directory with historical data from the last year:
+
+	$ while read line; do echo $line; ./get_stock_data.sh $line; done < stock_list 
+
+Check
+	$ ls *.csv
+	AMP.csv	BHP.csv	CBA.csv	FGL.csv	NAB.csv	ORG.csv	RIO.csv	TLS.csv	WDC.csv	WOW.csv
+	ANZ.csv	BXB.csv	CSL.csv	MQG.csv	NCM.csv	QBE.csv	SUN.csv	WBC.csv	WES.csv	WPL.csv
