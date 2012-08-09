@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import csv
+import random
 import sys
 
 # Trading prototype:
@@ -29,11 +30,15 @@ class DayValues:
 
 def main():
   day_values_list = read_stock_data()
+  generate_entry_points(day_values_list)
 
 # 1. get timespan of data - read latest and earliest entry
 # 2. generate random times during timespan
 def generate_entry_points(day_values_list):
-  print ""
+  for day_values in day_values_list:
+    entry_point = random.uniform(day_values.low, day_values.high)
+    print "low: %s high: %s entry: %s" % (day_values.low, day_values.high,
+        entry_point)
 
 def read_stock_data(stock_name = "RIO"):
   day_values_list = []
