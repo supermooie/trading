@@ -21,6 +21,9 @@ class DayValues:
   def set_entry_points(self, entry_points):
     self.entry_points = entry_points
 
+  def add_entry_point(self, entry_point):
+    self.entry_points.append(entry_point)
+
   def display(self):
     print "date: %s" % self.date
     print "open: %s" % self.open
@@ -31,14 +34,34 @@ class DayValues:
 def main():
   day_values_list = read_stock_data()
   generate_entry_points(day_values_list)
+  run(day_values_list)
 
 # 1. get timespan of data - read latest and earliest entry
 # 2. generate random times during timespan
 def generate_entry_points(day_values_list):
+# generate 4 entry points
   for day_values in day_values_list:
     entry_point = random.uniform(day_values.low, day_values.high)
+    day_values.add_entry_point(entry_point)
     print "low: %s high: %s entry: %s" % (day_values.low, day_values.high,
         entry_point)
+
+# determine success of entry points
+# trading strategy: sell at +2.5% and -10%
+def run(day_values_list):
+  for i, dv in enumerate(day_values_list):
+    entry_point = float(dv.entry_points[0])
+    upper_bound = entry_point + (0.025 * entry_point)
+    lower_bound = entry_point - (0.1 * entry_point)
+    #print "entry: %s upper bound: %s lower bound %s" % (entry_point, upper_bound, lower_bound)
+
+    for j in range(i, len(day_values_list)):
+      if day_values_list[j].high >= upper_bound:
+        print "+++ WIN - days on market:", j - i
+        break
+      elif day_values_list[j].low <= lower_bound:
+        print "--- LOSS - days on market:", j - i
+        break
 
 def read_stock_data(stock_name = "RIO"):
   day_values_list = []
