@@ -32,7 +32,10 @@ class DayValues:
     print "close: %s" % self.close
 
 def main():
-  day_values_list = read_stock_data()
+  if len(sys.argv) == 2:
+    stock_code = sys.argv[1]
+
+  day_values_list = read_stock_data(stock_code)
   generate_entry_points(day_values_list)
   run(day_values_list)
 
@@ -43,8 +46,8 @@ def generate_entry_points(day_values_list):
   for day_values in day_values_list:
     entry_point = random.uniform(day_values.low, day_values.high)
     day_values.add_entry_point(entry_point)
-    print "low: %s high: %s entry: %s" % (day_values.low, day_values.high,
-        entry_point)
+    # print "low: %s high: %s entry: %s" % (day_values.low, day_values.high,
+        # entry_point)
 
 # determine success of entry points
 # trading strategy: sell at +2.5% and -10%
@@ -56,14 +59,15 @@ def run(day_values_list):
     #print "entry: %s upper bound: %s lower bound %s" % (entry_point, upper_bound, lower_bound)
 
     for j in range(i, len(day_values_list)):
-      if day_values_list[j].high >= upper_bound:
-        print "+++ WIN - days on market:", j - i
-        break
-      elif day_values_list[j].low <= lower_bound:
+      if day_values_list[j].low <= lower_bound:
         print "--- LOSS - days on market:", j - i
+        break
+      elif day_values_list[j].high >= upper_bound:
+        print "+++ WIN - days on market:", j - i
         break
 
 def read_stock_data(stock_name = "RIO"):
+  print "stock: ", stock_name
   day_values_list = []
   stock_data = csv.reader(open('%s.csv' % stock_name))
 
