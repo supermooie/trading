@@ -52,18 +52,18 @@ def generate_entry_points(day_values_list):
 # determine success of entry points
 # trading strategy: sell at +2.5% and -10%
 def run(day_values_list):
-  for i, dv in enumerate(day_values_list):
+  for i, dv in enumerate(reversed(day_values_list)):
     entry_point = float(dv.entry_points[0])
     upper_bound = entry_point + (0.025 * entry_point)
     lower_bound = entry_point - (0.1 * entry_point)
     #print "entry: %s upper bound: %s lower bound %s" % (entry_point, upper_bound, lower_bound)
 
-    for j in range(i, len(day_values_list)):
+    for j in range(i+1, len(day_values_list)):
       if day_values_list[j].low <= lower_bound:
-        print "--- LOSS - days on market:", j - i
+        print "--- LOSS - days on market: %s Day entered: %s" % (j - i, dv.date)
         break
       elif day_values_list[j].high >= upper_bound:
-        print "+++ WIN - days on market:", j - i
+        print "+++ WIN - days on market: %s Day entered: %s" % (j - i, dv.date)
         break
 
 def read_stock_data(stock_name = "RIO"):
